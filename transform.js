@@ -1,8 +1,48 @@
-const forceReprint = ({ node }) => {
+const forceReprint = (node) => {
   /* eslint-disable no-param-reassign */
   node.original = null;
   /* eslint-disable no-param-reassign */
 };
+
+const reprintInit = path => forceReprint(path.value.init);
+
+const reprintValue = path => forceReprint(path.value.value);
+
+const declaredObj = j => [
+  j.VariableDeclarator,
+  {
+    init: {
+      type: 'ObjectExpression',
+    },
+  },
+];
+
+const objProperty = j => [
+  j.Property,
+  {
+    value: {
+      type: 'ObjectExpression',
+    },
+  },
+];
+
+const declaredArray = j => [
+  j.VariableDeclarator,
+  {
+    init: {
+      type: 'ArrayExpression',
+    },
+  },
+];
+
+const arrayProperty = j => [
+  j.Property,
+  {
+    value: {
+      type: 'ArrayExpression',
+    },
+  },
+];
 
 const transform = (file, api, { printOptions = {} }) => {
   const j = api.jscodeshift;
@@ -13,13 +53,25 @@ const transform = (file, api, { printOptions = {} }) => {
     wrapColumn: 0,
   });
 
-  root
-    .find(j.ObjectExpression)
-    .forEach(forceReprint);
+  const declaredObjects = root
+    .find(...declaredObj(j));
 
-  root
-    .find(j.ArrayExpression)
-    .forEach(forceReprint);
+  declaredObjects.forEach(reprintInit);
+
+  const objProperties = root
+    .find(...objProperty(j));
+
+  objProperties.forEach(reprintValue);
+
+  const declaredArrays = root
+    .find(...declaredArray(j));
+
+  declaredArrays.forEach(reprintInit);
+
+  const arrayProperties = root
+    .find(...arrayProperty(j));
+
+  arrayProperties.forEach(reprintValue);
 
   return root.toSource(options);
 };

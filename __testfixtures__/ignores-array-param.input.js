@@ -1,3 +1,3 @@
-/**
- * Created by bilnerc on 2/9/17.
- */
+const foo = ([ a, b, c, ...args ]) => {};
+
+const bar = foo([1, 2, 3]);
