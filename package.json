@@ -1,0 +1,30 @@
+{
+  "name": "new-line-codemod",
+  "version": "0.0.1",
+  "description": "Break objects and arrays onto new lines and add a trailing comma",
+  "main": "transform.js",
+  "scripts": {
+    "lint": "eslint transform.js",
+    "test": "npm run lint && jest --bail"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/craigbilner/new-line-codemod.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/craigbilner/new-line-codemod/issues"
+  },
+  "homepage": "https://github.com/craigbilner/new-line-codemod#readme",
+  "devDependencies": {
+    "eslint": "^3.15.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.9.0",
+    "jest": "^18.1.0",
+    "jscodeshift": "^0.3.30"
+  }
+}
