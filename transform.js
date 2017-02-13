@@ -60,7 +60,11 @@ const transform = (file, api, { printOptions = {} }) => {
   const root = j(file.source);
 
   const options = Object.assign(printOptions, {
-    trailingComma: true,
+    trailingComma: {
+      objects: true,
+      arrays: true,
+      functions: false,
+    },
     wrapColumn: 0,
   });
 

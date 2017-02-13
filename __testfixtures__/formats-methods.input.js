@@ -13,7 +13,7 @@ const bar = Baz({
 
   },
 
-  bar() {
+  bar(a) {
 
   }
 });
