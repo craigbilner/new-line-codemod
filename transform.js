@@ -10,6 +10,9 @@ const reprintInit = path => forceReprint(path.value.init);
 
 const reprintValue = path => forceReprint(path.value.value);
 
+const reprintElements = path =>
+  path.node.elements.forEach(forceReprint);
+
 const declaredObj = j => [
   j.VariableDeclarator,
   {
@@ -55,6 +58,15 @@ const arrayProperty = j => [
   },
 ];
 
+const arrayElements = j => [
+  j.ArrayExpression,
+  {
+    elements: [{
+      type: 'ObjectExpression',
+    }],
+  },
+];
+
 const transform = (file, api, { printOptions = {} }) => {
   const j = api.jscodeshift;
   const root = j(file.source);
@@ -92,6 +104,11 @@ const transform = (file, api, { printOptions = {} }) => {
     .find(...arrayProperty(j));
 
   arrayProperties.forEach(reprintValue);
+
+  const elementParents = root
+    .find(...arrayElements(j));
+
+  elementParents.forEach(reprintElements);
 
   return root.toSource(options);
 };
