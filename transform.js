@@ -4,6 +4,8 @@ const forceReprint = (node) => {
   /* eslint-disable no-param-reassign */
 };
 
+const reprintNode = path => forceReprint(path.value);
+
 const reprintInit = path => forceReprint(path.value.init);
 
 const reprintValue = path => forceReprint(path.value.value);
@@ -22,6 +24,15 @@ const objProperty = j => [
   {
     value: {
       type: 'ObjectExpression',
+    },
+  },
+];
+
+const funcProperty = j => [
+  j.Property,
+  {
+    value: {
+      type: 'FunctionExpression',
     },
   },
 ];
@@ -62,6 +73,11 @@ const transform = (file, api, { printOptions = {} }) => {
     .find(...objProperty(j));
 
   objProperties.forEach(reprintValue);
+
+  const funcProperties = root
+    .find(...funcProperty(j));
+
+  funcProperties.forEach(reprintNode);
 
   const declaredArrays = root
     .find(...declaredArray(j));
